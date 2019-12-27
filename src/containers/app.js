@@ -21,7 +21,6 @@ class App extends Component {
 
 	initMovies(){
 		axios.get(`${API_END_POINT}${POPULAR_MOVIES_URL}&${API_KEY}`).then((response)=>{
-			console.log('INIT MOVIES :::',response)
 			this.setState({
 				movieList:response.data.results.slice(1,6),
 				currentMovie:response.data.results[0]}, function(){
@@ -32,25 +31,40 @@ class App extends Component {
 
 	applyVideoToCurrentMovie(){ 
 		axios.get(`${API_END_POINT}movie/${this.state.currentMovie.id}?${API_KEY}&append_to_response=videos`).then((response)=>{
-			console.log('APPLY', response);
 			const youtubeKey = response.data.videos.results[0].key
 			let newCurrentMovieState = this.state.currentMovie;
 			newCurrentMovieState.videoId = youtubeKey;
 			this.setState({currentMovie : newCurrentMovieState}) 
 		});
 	}
+
+	receiveCallback(movie) {
+		this.setState({currentMovie:movie},function(){
+			this.applyVideoToCurrentMovie();
+		})
+	}
     render() {
 		const renderVideoList= () => {
 			if (this.state.movieList.length >=5) {
-				return <VideoList movieList={this.state.movieList}/>
+				return <VideoList movieList={this.state.movieList} callback={this.receiveCallback.bind(this)}/>
 			}
 		}
 			return (
 				<div>
-					<SearchBar/>
-					<Video videoId={this.state.currentMovie.videoId}/>
-					{renderVideoList()}
-					<VideoDetail title={this.state.currentMovie.title} description={this.state.currentMovie.overview}/>
+					<div className='search-bar'>
+						<SearchBar/>
+					</div>
+					<div className='row'>
+						<div className='col-md-8'>
+							<Video videoId={this.state.currentMovie.videoId}/>
+							<VideoDetail
+								title={this.state.currentMovie.title} 
+								description={this.state.currentMovie.overview}/>
+						</div>
+						<div className='col-md-4'>
+							{renderVideoList()}
+						</div>
+					</div>
 				</div>
 			)
 		};
