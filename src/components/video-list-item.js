@@ -6,17 +6,21 @@ const VideoListItem = (props) => {
     return <li className='list-group-item' onClick={handleOnClick}>
         <div className='media'>
             <div className='media-left'>
-                <img className='media-object image-rounded' height="100px" src={`${IMAGE_BASE_URL}${movie.poster_path}`}/>
+                <img className='media-object image-rounded' 
+                height="100px"
+                src={`${IMAGE_BASE_URL}${movie.poster_path}`}/>
             </div>
             <div className='media-body'>
-                <h5 className='title-list-item'>{movie.title}</h5>
+                <h5 className='title-list-item'>{movie .title}</h5>
             </div>
         </div>
     </li>
-
+ 
     function handleOnClick() {
         props.callback(movie)
     }
 }
 
 export default VideoListItem;
+
+

@@ -6,7 +6,7 @@ const VideoList = (props) => {
     return (
         <div>
             <ul>
-                {movieList.map(movie =>  {
+                {movieList.map(movie => {
                 return <VideoListItem key={movie.id} movie={movie} callback={receiveCallback}/>
                 })}
             </ul>
